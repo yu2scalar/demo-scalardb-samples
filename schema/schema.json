@@ -1,0 +1,68 @@
+{
+  "customer.customers": {
+    "transaction": true,
+    "partition-key": [
+      "customer_id"
+    ],
+    "secondary-index": [
+      "name"
+    ],
+    "columns": {
+      "customer_id": "INT",
+      "name": "TEXT",
+      "credit_limit": "BIGINT",
+      "credit_total": "BIGINT"
+    }
+  },
+  "ordering.orders": {
+    "transaction": true,
+    "partition-key": [
+      "order_id"
+    ],
+    "secondary-index": [
+      "customer_id",
+      "created_at"
+    ],
+    "columns": {
+      "order_id": "TEXT",
+      "customer_id": "INT",
+      "created_at": "BIGINT",
+      "status": "TEXT",
+      "total_amount": "BIGINT"
+    }
+  },
+  "ordering.statements": {
+    "transaction": true,
+    "partition-key": [
+      "order_id"
+    ],
+    "clustering-key": [
+      "line_no"
+    ],
+    "secondary-index": [
+      "item_id"
+    ],
+    "columns": {
+      "order_id": "TEXT",
+      "line_no": "INT",
+      "item_id": "INT",
+      "qty": "INT",
+      "unit_price": "BIGINT"
+    }
+  },
+  "inventory.items": {
+    "transaction": true,
+    "partition-key": [
+      "item_id"
+    ],
+    "secondary-index": [
+      "name"
+    ],
+    "columns": {
+      "item_id": "INT",
+      "name": "TEXT",
+      "price": "BIGINT",
+      "stock": "INT"
+    }
+  }
+}

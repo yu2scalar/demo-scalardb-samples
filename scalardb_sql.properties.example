@@ -1,0 +1,7 @@
+# ScalarDB Configuration Properties
+scalar.db.sql.connection_mode=cluster
+scalar.db.cluster.tls.enabled=false
+scalar.db.sql.cluster_mode.username=<user>
+scalar.db.cluster.auth.enabled=true
+scalar.db.sql.cluster_mode.password=<password>
+scalar.db.sql.cluster_mode.contact_points=indirect:<host>

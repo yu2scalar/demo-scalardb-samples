@@ -1,0 +1,6 @@
+# ScalarDB Cluster: one node in standalone mode (scalar.db.cluster.node.standalone_mode.enabled=true)
+# without authentication. Copy to scalardb-cluster-local.properties (not in git) and run with
+# --spring.profiles.active=cluster-local. The storage (e.g. Oracle or multi-storage) is set on the node.
+scalar.db.transaction_manager=cluster
+scalar.db.contact_points=indirect:<host>
+scalar.db.cluster.auth.enabled=false

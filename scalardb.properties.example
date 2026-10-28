@@ -1,0 +1,6 @@
+# ScalarDB Configuration Properties
+scalar.db.transaction_manager=cluster
+scalar.db.password=<password>
+scalar.db.contact_points=indirect:<host>
+scalar.db.cluster.auth.enabled=true
+scalar.db.username=<user>

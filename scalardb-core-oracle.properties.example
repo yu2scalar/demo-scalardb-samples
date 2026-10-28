@@ -1,0 +1,14 @@
+# ScalarDB Core (Consensus Commit, JDBC) on Oracle only.
+# Copy to scalardb-core-oracle.properties and set your values (not in git).
+# Run with --spring.profiles.active=core-oracle. The tables (and the coordinator table) are
+# created by the Schema Loader: java -jar scalardb-schema-loader-<version>.jar
+#   --config scalardb-core-oracle.properties --schema-file schema/schema.json --coordinator
+scalar.db.transaction_manager=consensus-commit
+scalar.db.storage=jdbc
+scalar.db.contact_points=jdbc:oracle:thin:@//<host>:1521/<service>
+scalar.db.username=<user>
+scalar.db.password=<password>
+scalar.db.consensus_commit.isolation_level=READ_COMMITTED
+# Needed by GET /customers/{id}/orders?method=scan (ScanAll + where)
+scalar.db.cross_partition_scan.enabled=true
+scalar.db.cross_partition_scan.filtering.enabled=true

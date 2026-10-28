@@ -1,0 +1,11 @@
+# ScalarDB Core (Consensus Commit, JDBC), used with --spring.profiles.active=core.
+# It can use the same database as ScalarDB Cluster; do not run load tests on both at the same time.
+scalar.db.transaction_manager=consensus-commit
+scalar.db.storage=jdbc
+scalar.db.contact_points=jdbc:postgresql://<host>:5432/db_postgres
+scalar.db.username=<user>
+scalar.db.password=<password>
+scalar.db.consensus_commit.isolation_level=READ_COMMITTED
+# Needed by ScanAll + where: GET /customers/{id}/orders?method=scan, the name search and customer-crud
+scalar.db.cross_partition_scan.enabled=true
+scalar.db.cross_partition_scan.filtering.enabled=true
