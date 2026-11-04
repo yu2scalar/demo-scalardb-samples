@@ -37,6 +37,8 @@ import org.springframework.stereotype.Service;
 public class CustomerCrudService {
     public static final String EXACT = "exact";
     public static final String PREFIX = "prefix";
+    // Load test only (W5, W6): by the primary key customer_id instead of the name
+    public static final String KEY = "key";
 
     DistributedTransactionManager manager;
 
@@ -78,6 +80,44 @@ public class CustomerCrudService {
             customersRepository.updateCustomerCustomers(transaction, customer);
             return 1;
         });
+    }
+
+    // Get one row by the primary key in one transaction: 0 or 1 rows (load test W6)
+    public List<CustomerCustomers> readByKey(int customerId) throws CustomException {
+        return runInTransaction(transaction -> {
+            CustomerCustomers customer = getOrNull(transaction, customerId);
+            return customer == null ? List.<CustomerCustomers>of() : List.of(customer);
+        });
+    }
+
+    /**
+     * Get the row by the primary key, then add 1 to credit_total, in one transaction (load test W5).
+     * Returns the number of rows updated (0 if there is no row). There is no locking read:
+     * Consensus Commit detects a conflicting update at commit, as in readModifyWrite.
+     */
+    public int readModifyWriteByKey(int customerId) throws CustomException {
+        return runInTransaction(transaction -> {
+            CustomerCustomers customer = getOrNull(transaction, customerId);
+            if (customer == null) {
+                return 0;
+            }
+            customer.setCreditTotal(customer.getCreditTotal() + 1);
+            customersRepository.updateCustomerCustomers(transaction, customer);
+            return 1;
+        });
+    }
+
+    // The row, or null if there is none (the repository's 9700)
+    private CustomerCustomers getOrNull(DistributedTransaction transaction, int customerId) throws Exception {
+        try {
+            return customersRepository.getCustomerCustomers(transaction,
+                CustomerCustomers.builder().customerId(customerId).build());
+        } catch (CustomException e) {
+            if (Integer.valueOf(9700).equals(e.getErrorCode())) {
+                return null;
+            }
+            throw e;
+        }
     }
 
     // Insert customer_id from..to in one transaction (name by OrderRules.testName, credit_total 0)
